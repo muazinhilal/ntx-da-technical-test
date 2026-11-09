@@ -1,0 +1,10 @@
+step,rows_affected,rows_after,note
+Drop exact duplicate rows (keep first),150,7159,every duplicated order_id was a byte-for-byte copy
+Remove test/dummy records,32,7127,"customer_id=TEST, sales_rep=dummy, order_id=ORD-Txxx, unit_price 0 or 1"
+Standardise region / channel / category text,1027,7127,"trim whitespace, unify case and aliases; missing region -> 'Unknown'"
+Parse dates (ISO + dd/mm/yyyy),982,7127,dd/mm/yyyy rows start 2026-04-01
+Rescale rows reported in IDR thousands (x1000),982,7127,"unit_price, revenue and cost; all are dd/mm/yyyy rows from April 2026"
+Convert discount given in percent (e.g. 5 -> 0.05),293,7127,"values 5, 10, 20, 25, 30"
+Drop re-keyed duplicate orders (keep lowest order_id),40,7087,"same date/customer/product/qty/price/revenue, new order_id, cost within normal noise"
+Fill missing cost (product-year median unit cost) / mirror cost on returns,499,7087,flagged in cost_source; cancelled lines are not counted
+Flag implausible Retail quantities (>5 units) and exclude from analysis,8,7087,"kept in file, include_in_analysis=False"
